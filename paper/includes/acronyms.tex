@@ -1,0 +1,233 @@
+% !TEX root = ../truncated-reduced.tex
+
+\iftrue
+
+\usepackage[acronym,nohypertypes={acronym,notation}]{glossaries}
+
+\setacronymstyle{long-short}
+
+\let\newacro\newacronym
+\newcommand{\acro}[2]{\newacronym{#1}{#1}{\emph{#2}}}
+
+\let\ac\gls
+\let\Ac\Gls
+\let\acsp\glsentryshortpl
+\let\acp\glspl
+\let\Acp\Glspl
+\let\acs\glsentryshort
+\let\acl\glsentrylong
+\newcommand{\acf}[1]{\glsentrylong{#1}~\glsentryshort{#1}}
+\let\acresetall\relax
+
+\else
+\iftrue
+
+\usepackage[printonlyused,withpage]{acronym}
+\let\acro\acrodef
+\let\acroplural\acrodefplural
+
+\renewcommand*{\acffont}[1]{\textit{#1}}
+\renewcommand*{\acfsfont}[1]{\textnormal{#1}}
+%\renewcommand*{\acsfont}[1]{\textnormal{#1}}
+
+\else
+
+\usepackage{acro}
+\acsetup{format/long = \itshape}
+
+\makeatletter
+
+\newcommand*\acro[1]{%
+	\@ifnextchar[%
+	{\MY@acro{#1}}%
+	{\MY@acro{#1}[#1]}}
+
+\def\MY@acro#1[#2]#3{{
+			\DeclareAcronym{#1}{
+				short = {#2},
+				long = {#3}
+			}}}
+
+\makeatother
+
+\let\acused\acuse
+
+\fi
+\fi
+
+\acro{AC}{Access Control}
+\acro{AD}{Associated Data}
+\acro{AE}{Authenticated Encryption}
+\acro{AEAD}{Authenticated Encryption with Associated Data}
+\acro{AREA}{Added Redundancy Explicit Authentication}
+\acro{BPT}{Branching Probability Table}
+\acro{BMT}{Bonsai Merkle Tree}
+\acro{CBC}{Cipher Block Chaining}
+\acro{CC}{core characteristic}
+\acro{CCA}{Chosen Ciphertext Attack}
+\acro{CFI}{Code Flow Integrity}
+\acro{CG}{Counter Group}
+\acro{CL}{Cache Line}
+%\acro{CMAC}{Cipher-based \acs{MAC}}
+\acro{CP}{Chosen Plaintext}
+\acro{CPA}{Chosen Plaintext Attack}
+\acro{CPI}{Cycles per Instruction}
+\acro{CPU}{Central Processing Unit}
+\acro{CT}{Counter Tree}
+\acro{CTR}{CounTeR mode}
+\acro{CTRT}{CounTeR in Tweak}
+\acro{CVC}{Cooperating Validity Checker}
+\acro{DDR}{Double Data Rate}
+\acro{DDT}{Difference Distribution Table}
+\acro{DMA}{Direct Memory Access}
+%%%\acro{DH}[hash]{Data Hash}
+\acro{DoS}{Denial of Service}
+\acro{DIMM}{Dual Inline Memory Module}
+%\acused{DIMM} % Force usage of short form
+\acro{DPA}{Differential Power Analysis}
+\acro{DRAM}{Dynamic Random Access Memory}
+%\acused{DRAM} % Force usage of short form
+\acro{DRM}{Digital Rights Management}
+\acro{ECB}{Electronic Codebook}
+%\acro{ECC}{extended Characteristic}
+\acro{ECC}{Error Correcting Code}
+\acro{ECDSA}{Elliptic Curve Digital Signature Algorithm}
+\acro{EDM}{Encrypted Davis-Meyer}
+\acro{EDMD}{Encrypted Davis-Meyer Dual}
+\acro{EL}{Exception Level}
+\acro{ELM}{Encryption for Large Memory}
+\acro{EM}{Even-Mansour}
+\acro{EPC}{Enclave Page Cache}
+\acro{FW}{Firmware}
+\acro{GCM}{Galois/Counter Mode}
+\acro{GE}{Gate Equivalents}
+\acro{GPT}{Guest Page Table}
+%\acro{HMAC}{keyed-Hash \acs{MAC}}
+\acro{HPC}{High-Performance Computing}
+\acro{HPT}{Host Page Table}
+\acro{HW}{Hardware}
+%\acro{IACBC}{Integrity Aware \acs{CBC}}
+\acro{IAPM}{Integrity Aware Parallelizable Mode}
+\acro{IDE}{Integrity and Data Encryption}
+\acro{ISA}{Instruction Set Architecture}
+\acro{IVEC}{Integrity Verification with Error Correction}
+\acro{IV}{Initialization Vector}
+\acro{JIT}{Just-in-time}
+\acro{KDF}{Key Derivation Function}
+\acro{KC}{Known Ciphertext}
+\acro{KP}{Known Plaintext}
+\acro{KPA}{Known Plaintext Attack}
+\acro{LLC}{Last Level Cache}
+\acro{LFSR}{Linear Feedback Shift Register}
+\acro{LRU}{Least Recently Used}
+\acro{tPLRU}{tree Pseudo-LRU}
+\acro{MAC}{Message Authentication Code}
+%\acro{MD}[metadata]{Metadata}
+%\acused{MD}
+\acro{ME}{Memory Encryption}
+\acro{MEAS}{Memory Encryption and Authentication Secure against side-channel attacks}
+\acro{MEE}{Memory Encryption Engine}
+\acro{MEM}{Masked Even-Mansour}
+\acro{MitM}{Meet in the Middle}
+%\acro{MirE}[\MirE]{MAC in repurposed ECC bits}
+\acro{MKTMEi}{Multi-Key Total Memory Engine with Integrity}
+\acro{MPE}{Memory Protection Engine}
+\acro{MRAE}{(nonce-)Misuse Resistant AE}
+\acro{MT}{Merkle Tree}
+\acro{MTE}{Memory Tagging Extension}
+\acro{NIST}{National Institute of Standards and Technology}
+\acro{NLFSR}{Non-Linear Feedback Shift Register}
+\acro{NUMA}{Non-Uniform Memory Access}
+\acro{ccNUMA}{Cache-Coherent NUMA}
+\acro{NZC}{Non-Zero Counters}
+%\acro{NMAC}{Nested \acs{MAC}}
+\acro{NSA}{National Security Agency} %%%{Nation State Adversary}
+\acro{OCB}{Offset Codebook mode}
+%\acro{oCC}[\oCC]{on-chip counters}
+\acro{OFB}{Output Feedback Mode}
+\acro{OS}{Operating System}
+\acro{OTP}{One-Time Pad}
+\acro{PAT}{Parallelizable Authentication Tree}
+\acro{PA}{Physical Address}
+\acro{PAC}{Pointer Authentication Code}
+\acro{PCB}{Printed Circuit Board}
+\acro{PD}{Process Domain}
+\acro{PEE}{Protected Execution Environment}
+\acro{PLT}{Procedure Linkage Table}
+\acro{PKI}{Public Key Infrastructure}
+%\acro{PMAC}{Parallel \acs{MAC}}
+\acro{PoP}{Package-on-Package}
+\acro{PRF}{Pseudo-Random Function}
+\acro{PRNG}{Pseudo-Random Number Generator}
+\acro{PRP}{Pseudo-Random Permutation}
+\acro{PT}{Page Table}
+\acro{RAM}{Random Access Memory}
+\acro{RAS}{Reliability, Availability, and Serviceability}
+\acro{RNG}{Random Number Generator}
+\acro{RMW}{Read-Modify-Write}
+\acro{ROM}{Read-Only Memory}
+\acro{ROP}{Return-Oriented Programming}
+\acro{RoT}{Root of Trust}
+\acro{RSA}{Rivest, Shamir, and Adleman}
+\acro{SCT}{Split Counter Tree}
+\acro{SEV}{Secure Encrypted Virtualization}
+%\acro{SGX}[\SGX]{Software Guard eXtensions}
+\acro{SIV}{Synthetic Initialization Vector}
+%\acro{SC}[system cache]{System Cache}
+\acro{SECDED}{Single-Error Correction and Double-Error Detection}
+%\acused{SC}
+%\acro{SME}[\SME]{Secure Memory Encryption}
+\acro{SMT}{Satisfiability Modulo Theories}
+\acro{SoC}{System-on-a-Chip}
+\acro{SPA}{Simple Power Analysis}
+\acro{SPN}{Substitution-Permutation Network}
+\acro{SRAM}{Static Random Access Memory}
+%\acused{SRAM} % Force usage of short form
+\acro{SW}{Software}
+\acro{TAE}{Tweakable Authenticated Encryption}
+\acro{TBC}{Tweakable Block Cipher}
+%\acro{TCBase}[TCB]{Trusted Computing Base}
+%\acro{TCBmode}[tCB]{Tweaked Codebook mode}
+%\acro{TDEA}[\texttt{TDEA}]{Triple Data Encryption Algorithm}
+\acro{TEC}{Tamper-Evident Counter}
+\acro{TEE}{Trusted Execution Environment}
+\acro{TGCM}{Tweaked Galois/Counter Mode}
+%\acro{tOCB-EC}[\textTheta CB-CA]{Tweaked Codebook mode with Checksum-based Authentication}
+%\acro{tOCB-LRW}[\textTheta CB3]{Tweaked Offset Codebook mode (v3)}
+\acro{TPM}{Trusted Platform Module}
+\acro{TRNG}{True Random Number Generator}
+\acro{TZ}{TrustZone}
+\acro{UHF}{Universal Hash Function}
+\acro{UMAC}{UHF based MAC}
+\acro{VA}{Virtual Address}
+\acro{VM}{Virtual Machine}
+\acro{XE}{XOR and Encrypt}
+\acro{XEX}{XOR, Encrypt, and XOR}
+\acro{XSL}{eXtended Sparse Linearization}
+\acro{XTS}{XEX-based tweaked-codebook mode with ciphertext Stealing}
+\acro{WKRH}{Wrong Key Randomization Hypothesis}
+
+%% \acused{SW}
+%% \acused{HW}
+%% \acused{ECC}
+%% \acused{DDR}
+%% \acused{DMA}
+%% \acused{RAM}
+%% \acused{DRAM}
+%% \acused{DIMM}
+%% \acused{RSA}
+%% \acused{ECDSA}
+%% \acused{LFSR}
+%% \acused{LRU}
+%% \acused{tPLRU}
+%% \acused{CL}
+%% \acused{DIMM}
+%% \acused{CG}
+%% %\acused{DH}
+
+\acro{KRD}{Key-Recovery Differential}
+\acro{EC}{extended characteristic}
+\acro{FHT}{Fast Hadamard Transform}
+\acro{FFT}{Fast Fourier Transform}
+\acro{FWT}{Fast Walsh Transform}
+\acro{ANF}{Algebraic Normal Form}

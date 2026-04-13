@@ -1,0 +1,354 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz}
+\usetikzlibrary{calc,backgrounds,trees,matrix,positioning,chains,fit,intersections}
+\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.markings}
+\usetikzlibrary{calligraphy}
+\usetikzlibrary{arrows,shapes.arrows,shapes.geometric,shapes.multipart,shapes.symbols}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shapes.misc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{patchplots}
+\usetikzlibrary{pgfplots.groupplots}
+
+\pgfplotsset{compat=1.18}
+
+\tikzset{
+	register/.style={
+			rectangle,
+			draw=black, thick,
+			minimum height=1.66em,
+			text centered,},
+	block/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			minimum height=1.66em,
+			text centered,},
+	circleblock/.style={
+			circle,
+			draw=black, thick,
+			minimum height=1.66em,
+			text centered,},
+	blockSQ/.style={
+			rectangle,
+			draw=black, thick,
+			minimum height=1.66em,
+			text centered,},
+	wideblock/.style={
+			block,
+			minimum width=30mm,},
+	midblock/.style={
+			block,
+			minimum width=15mm,},
+	midblockSQ/.style={
+			block,
+			rounded corners=false,
+			minimum width=15mm,},
+	funsmall/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			%text width=5em,
+			minimum height=1.66em,
+			text centered,},
+	funs/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			%text width=5em,
+			minimum height=1.66em,
+			text centered,},
+	function/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			minimum height=1.66em,
+			minimum width=0.8cm,
+			text centered,},
+	widefun/.style={
+			funsmall,
+			minimum width=30mm,},
+	IOsmall/.style={
+			ellipse,
+			draw,
+			thick,
+			minimum height=1.66em,
+			text centered,},
+	IO/.style={
+			IOsmall,
+			text width=3.3em,},
+	cross line/.style={ preaction={draw=white, -, shorten >=1pt, shorten <=1pt, line width=2.5pt}},
+	arrow/.style = {->,black,semithick},
+	worra/.style = {<-,black,semithick},
+	connect/.style = {-,semithick},
+	%decoration={brace},
+}
+
+\def\branch#1{\fill #1 circle [radius=1.5pt];}
+
+\tikzset{XOR/.style=
+		{draw,circle,thick,fill=white,scale=1.1,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.north) edge[thick] (\tikzlastnode.south)
+					(\tikzlastnode.east) edge[thick] (\tikzlastnode.west)}
+		},
+	AND/.style=
+		{draw,circle,thick,fill=white,scale=1.1,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.north) edge[thick] (\tikzlastnode.south east)
+					(\tikzlastnode.north) edge[thick] (\tikzlastnode.south west)}
+		},
+	OR/.style=
+		{draw,circle,thick,fill=white,scale=1.1,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.south) edge[thick] (\tikzlastnode.north east)
+					(\tikzlastnode.south) edge[thick] (\tikzlastnode.north west)}
+		},
+	NOT/.style=
+		{draw,circle,thick,fill=white,scale=1.1,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					($(\tikzlastnode.west)+(1.5pt,-0.625pt)$) edge[thick,out=45,in=225] ($(\tikzlastnode.east)-(1.5pt,-0.625pt)$)
+				}
+		},
+	PLUS/.style=
+		{draw,rectangle,thick,fill=white,scale=1.5,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.north) edge[thick] (\tikzlastnode.south)
+					(\tikzlastnode.east) edge[thick] (\tikzlastnode.west)}
+		},
+	MINUS/.style=
+		{draw,rectangle,thick,fill=white,scale=1.5,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.east) edge[thick] (\tikzlastnode.west)}
+		},
+	TIMES/.style=
+		{draw,circle,thick,fill=white,scale=1.1,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.south west) edge[thick] (\tikzlastnode.north east)
+					(\tikzlastnode.south east) edge[thick] (\tikzlastnode.north west)}
+		},
+	MULT/.style=
+		{draw,circle,thick,fill=white,scale=1.1, append after command={
+					node[fill,circle,thick,inner sep=0.3mm] at (\tikzlastnode) {} }
+		},
+	COMP/.style=
+		{draw,circle,thick,fill=white,scale=1.1, append after command={
+					node[draw,circle,thick,inner sep=0.6mm] at (\tikzlastnode) {} }
+		},
+	COMPAST/.style=
+		{draw,circle,thick,fill=white,scale=1.1, append after command={
+					node[] at ($(\tikzlastnode)+(0.1pt,-0.3pt)$) (tmp) {\scalebox{1.333}{$\ast$}}  }
+		},
+	branch/.style=
+		{fill,shape=circle,minimum size=3pt,inner sep=0pt},
+	bit/.style=
+		{fill,shape=rectangle,minimum size=0.5mm,inner sep=0pt},
+}
+
+\tikzset{miniXOR/.style=
+		{draw,circle,fill=white,scale=0.7,semithick,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.north) edge[semithick] (\tikzlastnode.south)
+					(\tikzlastnode.east) edge[semithick] (\tikzlastnode.west)}
+		},
+	miniAND/.style=
+		{draw,circle,semithick,fill=white,scale=0.7,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.north) edge[semithick] (\tikzlastnode.south east)
+					(\tikzlastnode.north) edge[semithick] (\tikzlastnode.south west)}
+		},
+	miniNOT/.style=
+		{draw,circle,semithick,fill=white,scale=0.7,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					($(\tikzlastnode.west)+(1pt,-0.425pt)$) edge[semithick,out=60,in=240,looseness=2] ($(\tikzlastnode.east)-(1pt,-0.425pt)$)
+				}
+		},
+	miniTIMES/.style=
+		{draw,circle,thick,fill=white,scale=0.7,append after command={
+					[shorten >=\pgflinewidth, shorten <=\pgflinewidth,]
+					(\tikzlastnode.south west) edge[thick] (\tikzlastnode.north east)
+					(\tikzlastnode.south east) edge[thick] (\tikzlastnode.north west)}
+		},
+	gentle cross line/.style={ preaction={draw=white, -, shorten > = 2pt, shorten < = 2pt, line width=2.5pt}},
+}
+
+\tikzset{
+	tallblock/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			fill=verylightgray,
+			minimum height=3em,
+			minimum width=2em,
+			text centered,},
+}
+
+\tikzset{
+	tallerblock/.style={
+			rectangle,
+			rounded corners,
+			draw=black, thick,
+			fill=verylightgray,
+			minimum height=4em,
+			minimum width=2.66em,
+			text centered,},
+}
+
+\tikzset{encryption/.style={
+			rectangle,
+			thick,
+			draw,
+			fill=gray!15,
+			text width=1.41cm,
+			minimum height=1cm,
+			text centered,
+			anchor=north,
+			rounded corners=0.5mm
+		}}
+
+\tikzset{tallencryption/.style={
+			rectangle,
+			thick,
+			draw,
+			fill=gray!15,
+			minimum height=3em,
+			minimum width=2em,
+			text centered,
+			rounded corners=0.5mm
+		}}
+
+%\tikzset{>=myto}
+\tikzset{>=latex}
+
+\usepackage{scalerel}
+
+\makeatletter
+
+\pgfarrowsdeclare{littlebar}{littlebar}
+{
+	\pgfarrowsleftextend{+-0.25\pgflinewidth}
+	\pgfarrowsrightextend{+.75\pgflinewidth}
+}
+{
+	\pgfutil@tempdima=1pt%
+	\advance\pgfutil@tempdima by1.5\pgflinewidth%
+	\pgfsetdash{}{+0pt}
+	\pgfsetrectcap
+	\pgfpathmoveto{\pgfqpoint{0.25\pgflinewidth}{-\pgfutil@tempdima}}
+	\pgfpathlineto{\pgfqpoint{0.25\pgflinewidth}{\pgfutil@tempdima}}
+	\pgfusepathqstroke
+}
+\pgfkeys{Littlebar /.tip = littlebar}
+
+\makeatother
+
+\newbox\twoboxes
+\newdimen\twoboxeswidth
+
+%\let\svrightarrow\rightarrow
+\ifodd2
+	\newcommand{\txrightarrow}[1]{\mathbin{\tikz[baseline]\draw[semithick,yshift=0.6ex,->] (0,0) -- (#1,0);}}
+	\newcommand{\trightarrow}{\txrightarrow{1.05em}}
+
+	\newcommand{\txleftarrow}[1]{\mathbin{\tikz[baseline]\draw[semithick,yshift=0.6ex,<-] (0,0) -- (#1,0);}}
+	\newcommand{\tleftarrow}{\txleftarrow{1.05em}}
+
+	\newcommand{\txmapsto}[1]{\mathbin{\tikz[baseline]\draw[semithick,yshift=0.6ex,Littlebar->] (0,0) -- (#1,0);}}
+	\newcommand{\tmapsto}{\txmapsto{1.05em}}
+
+	\newcommand{\txmapsfrom}[1]{\mathbin{\tikz[baseline]\draw[semithick,yshift=0.6ex,<-Littlebar] (0,0) -- (#1,0);}}
+	\newcommand{\tmapsfrom}{\txmapsfrom{1.05em}}
+
+	\newcommand{\xxrightarrow}[2]{%
+		\setbox\twoboxes\vbox{\hbox{$\scriptstyle{#1}$}\hbox{$\scriptstyle{#2}$}}%
+		\twoboxeswidth=\wd\twoboxes%
+		\addtolength\twoboxeswidth{.60em}%
+		\mathrel{\mathop{\vphantom{x}\txrightarrow{\twoboxeswidth}}\limits_{#1\,}^{#2\,}}%
+	}
+
+	\newcommand{\xxleftarrow}[2]{%
+		\setbox\twoboxes\vbox{\hbox{$\scriptstyle{#1}$}\hbox{$\scriptstyle{#2}$}}%
+		\twoboxeswidth=\wd\twoboxes%
+		\addtolength\twoboxeswidth{.60em}%
+		\mathrel{\mathop{\vphantom{x}\txleftarrow{\twoboxeswidth}}\limits_{\,#1}^{\,#2}}%
+	}
+
+	\newcommand{\xxmapsto}[2]{%
+		\setbox\twoboxes\vbox{\hbox{$\scriptstyle{#1}$}\hbox{$\scriptstyle{#2}$}}%
+		\twoboxeswidth=\wd\twoboxes%
+		\addtolength\twoboxeswidth{.60em}%
+		\mathrel{\mathop{\vphantom{x}\txmapsto{\twoboxeswidth}}\limits_{#1\,}^{#2\,}}%
+	}
+
+	\newcommand{\xxmapsfrom}[2]{%
+		\setbox\twoboxes\vbox{\hbox{$\scriptstyle{#1}$}\hbox{$\scriptstyle{#2}$}}%
+		\twoboxeswidth=\wd\twoboxes%
+		\addtolength\twoboxeswidth{.60em}%
+		\mathrel{\mathop{\vphantom{x}\txmapsfrom{\twoboxeswidth}}\limits_{\,#1}^{\,#2}}%
+	}
+\fi
+
+\ifodd2
+	\newcommand{\tikzxmark}{%
+		\tikz[scale=0.23] {
+			\draw[line width=0.7,line cap=round] (0,0) to [bend left=6] (1,1);
+			\draw[line width=0.7,line cap=round] (0.2,0.95) to [bend right=3] (0.8,0.05);
+		}}
+	\newcommand{\tikzcmark}{%
+		\tikz[scale=0.23] {
+			\draw[line width=0.7,line cap=round] (0.25,0) to [bend left=10] (1,1);
+			\draw[line width=0.8,line cap=round] (0,0.35) to [bend right=1] (0.23,0);
+		}}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\def\fns{\footnotesize}
+\def\vp{\vphantom{$1_9$}}
+
+\tikzstyle{int}=[draw, fill=blue!20, minimum size=2em]
+\tikzstyle{init} = [pin edge={to-,thin,black}]
+\tikzset{
+	fun8/.style={
+			funsmall,
+			minimum height=8mm,
+			minimum width=8mm,},
+	fun7/.style={
+			funsmall,
+			minimum height=7mm,
+			minimum width=7mm,},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\braceA}[2]{%
+	\tikz{%
+		\clip(-0.05,-0.12) rectangle ($(#1,0)+(0.3886,0.12)$);
+		\path[draw=black,line width=#2,rounded corners=0.5pt]
+		(0,-0.11)
+		to[out=60,in=180]
+		(0.2,0)
+		--
+		($(#1,0)+(0.2,0)$)
+		to[out=0,in=255]
+		($(#1,0)+(0.4,0.11)$);
+	}%
+}
+
+\newcommand{\braceB}[2]{%
+	\tikz{%
+		\clip ($(-0.3886,0.12)-(#1,0)$)  rectangle (0.05,-0.12);
+		\path[draw=black,line width=#2,rounded corners=0.5pt]
+		($(-0.4,0.11)-(#1,0)$)
+		to[out=285,in=180]
+		($(-0.2,0)-(#1,0)$)
+		--
+		(-0.2,0)
+		to[out=0,in=120]
+		(0,-0.11);
+	}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

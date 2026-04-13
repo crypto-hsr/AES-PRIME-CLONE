@@ -1,0 +1,265 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Typesetting matrices of cell permutations from permutations as lists
+
+\newcount\qcnt
+\newcount\rcnt
+\newcount\scnt
+\newtoks\auxarraytoks
+\newcount\myindex
+
+\def\zerocolor{gray}
+
+\def\divrem#1#2{%
+	\rcnt=#1
+	\scnt=#1
+	\divide\scnt by #2
+	\global\qcnt=\scnt
+	\multiply\scnt by #2
+	\global\advance\rcnt by -\scnt
+	\let\mathresult=\rcnt
+}
+
+\newcommand{\appendto}[2]{\global #1=\expandafter{\the#1#2}}
+
+\newcommand{\appendexpandedvalueto}[2]{%
+	\begingroup
+	\edef\x{%
+		\endgroup
+		\noexpand\appendto{\noexpand #1}{#2}}
+	\x}
+
+%% use pgf's for construct to loop over a comma separated list
+
+\newcommand{\arrayfromperm}[2]{%
+	\auxarraytoks=\expandafter{\begin{array}{cccc}}%
+			\foreach \entry [count=\index] in {#2} {%
+					\ifthenelse{\equal{\entry}{\vdots}}
+					{\appendto{\auxarraytoks}{\vdots}}
+					{\appendexpandedvalueto{\auxarraytoks}{#1_{\entry}}}%
+					\divrem{\index}{4}%
+					\ifthenelse{\equal{\the\mathresult}{0}}%
+			{\appendto{\auxarraytoks}{      \\ }}%
+			{\appendto{\auxarraytoks}{ & }} %
+				}
+			\appendto{\auxarraytoks}{\end{array}}%
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\representstatemapA}[4]{%
+	\left(
+	\arrayfromperm{#1}{#2}
+	\right)
+	\xmapsto{#3}
+	\left(
+	\arrayfromperm{#1}{#4}
+	\right)
+}
+
+\newcommand{\representstatemapB}[4]{%
+	\left(
+	\begin{array}{cccccccccccccccc}
+		\StrSubstitute{#2}{,}{ & } \\
+		\StrSubstitute{#4}{,}{ & }
+	\end{array}
+	\right)
+}
+
+\newcommand{\representstatemapX}[1]{%
+	\left[
+		\begin{array}{@{} *{4}{wr{2.66ex}@{\,,}} @{\enspace} *{4}{wr{2.66ex}@{\,,}} @{\enspace} *{4}{wr{2.66ex}@{\,,}} @{\enspace} *{3}{wr{2.66ex}@{\,,}} w{r}{2.66ex}@{\enspace}}
+			\StrSubstitute{#1}{,}{ & }
+		\end{array}
+		\right]
+}
+
+\newcommand{\representstatemapC}[1]{%
+	\left(%
+	\auxarraytoks=\expandafter{%
+		\begin{array}{@{} *{4}{wc{3.667ex}@{}} @{\enspace} *{4}{wc{3.667ex}@{}} @{\enspace} *{4}{wc{3.667ex}@{}} @{\enspace} *{3}{wc{3.667ex}@{}} wc{3.667ex}@{\,}}%
+			}%
+			\foreach \entry [count=\index] in {#1} {%
+					\appendexpandedvalueto{\auxarraytoks}{c_{\entry}}%
+					\ifthenelse{\equal{\index}{16}}%
+					{\appendto{\auxarraytoks}{}}%
+			{\appendto{\auxarraytoks}{ & }} %
+				}
+			\appendto{\auxarraytoks}{\end{array}}%
+	\expandafter{\the\auxarraytoks}%
+	\right)%
+}
+
+\let\representstatemap\representstatemapA
+
+\tikzset{
+	fillopts/.style={diff},
+}
+
+\let\Fill\FillSingle
+
+\newcommand{\arrayfromstate}[1]{%
+	\auxarraytoks=\expandafter{}%
+	\foreach \entry in {#1} {%
+			\divrem{\entry}{4}
+			\appendto{\auxarraytoks}{\Fill[fillopts]}%
+			\appendexpandedvalueto{\auxarraytoks}{{ss\number\qcnt\number\rcnt}}%
+		}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\boomarrayfromstate}[1]{%
+	\auxarraytoks=\expandafter{}%
+	\foreach \entry in {#1} {%
+			\divrem{\entry}{4}
+			\appendto{\auxarraytoks}{\node[starburst, draw, minimum width=3cm, minimum height=2cm,red,fill=orange,line width=1.5pt]{BOOM!}
+			}%
+			\appendexpandedvalueto{\auxarraytoks}{at ({ss\number\qcnt\number\rcnt}) {};}%
+		}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\coloredarrayfromstate}[2]{%
+	\auxarraytoks=\expandafter{}%
+	\foreach \entry [count=\index] in {#2} {%
+			\myindex=\index
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}
+			\ifthenelse{\equal{\entry}{0}}
+			{}%
+			{\appendto{\auxarraytoks}{\Fill[fill=#1]}}%
+			\appendexpandedvalueto{\auxarraytoks}{{ss\number\qcnt\number\rcnt}}%
+		}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\cellnumbers}{%
+	\auxarraytoks=\expandafter{}%
+	\foreach \entry in {0,...,15} {%
+			\myindex=\index
+			\divrem{\myindex}{4}
+			\appendto{\auxarraytoks}{\node[] {\color{darkgray}\entry}}%
+			\appendexpandedvalueto{\auxarraytoks}{ at ({ss\number\qcnt\number\rcnt})}%
+		}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\makeatletter
+\newcommand\notsotiny{\@setfontsize\notsotiny\@vipt\@viipt}
+\makeatother
+
+\newcommand{\fourcolorarrayfromstate}[1]{%
+	\auxarraytoks=\expandafter{}%
+	\foreach \entry [count=\index] in {#1} {%
+			\myindex=\index%
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}%
+			\ifthenelse{\equal{\entry}{4}}{\appendto{\auxarraytoks}{\Fill[fill=green]}}{%
+				\ifthenelse{\equal{\entry}{1}}{\appendto{\auxarraytoks}{\Fill[fill=darkgray]}}{%
+					\ifthenelse{\equal{\entry}{2}}{\appendto{\auxarraytoks}{\Fill[fill=blue]}}{%
+						\ifthenelse{\equal{\entry}{3}}{\appendto{\auxarraytoks}{\Fill[fill=red]}}%
+						{}}}}% 4
+			\appendexpandedvalueto{\auxarraytoks}{{ss\number\qcnt\number\rcnt}}%
+		}
+	%
+	\appendto{\auxarraytoks}{\tikzset{cellopts/.style={font=\notsotiny}}}
+%
+\foreach \entry [count=\index] in {#1} {%
+		\myindex=\index%
+		\advance \myindex by -1%
+		\appendto{\auxarraytoks}{\Cell}%
+		\appendexpandedvalueto{\auxarraytoks}{{s\number\myindex}}%
+		\ifthenelse{\equal{\entry}{0}}%
+		{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{gray}{\number\myindex}}}}%
+		{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{white}{\number\myindex}}}}%
+	}
+%
+\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\arrayofnumbers}[2]{%
+	\auxarraytoks=\expandafter{}%
+	\appendto{\auxarraytoks}{\scriptsize}%
+	\index=0%
+	\foreach \entry [count=\index] in {#2} {%
+			\myindex=\index
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}
+			\appendto{\auxarraytoks}{\node[anchor=center] at }%
+			\appendexpandedvalueto{\auxarraytoks}{(ss\number\qcnt\number\rcnt)}%
+			\ifthenelse{\equal{\entry}{-1}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\redtext{$*$}};}}
+			{\ifthenelse{\equal{\entry}{0}}
+				{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{\zerocolor}{$0$}};}}
+				{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{#1}{\entry}};}}}
+		}
+	\typeout{\the\auxarraytoks}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\arrayofnumbersbg}[3]{%
+	\auxarraytoks=\expandafter{}%
+	\appendto{\auxarraytoks}{\scriptsize}%
+	\foreach \entry [count=\index] in {#3}
+		{%
+			\myindex=\index%
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}%
+			\ifthenelse{\equal{\entry}{}}
+			{}
+			{\ifthenelse{\equal{#2}{}}
+				{}
+				{\appendto{\auxarraytoks}{\Fill[fill=#2]}}}%
+			\appendexpandedvalueto{\auxarraytoks}{{ss\number\qcnt\number\rcnt}}%
+		}
+	\foreach \entry [count=\index] in {#3}
+		{%
+			\myindex=\index
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}
+			\appendto{\auxarraytoks}{\node[anchor=center] at }%
+			\appendexpandedvalueto{\auxarraytoks}{(ss\number\qcnt\number\rcnt)}%
+			\ifthenelse{\equal{\entry}{-1}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\redtext{$*$}};}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{#1}{\entry}};}}
+		}
+	\typeout{\the\auxarraytoks}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\arrayofnumbersscaled}[3]{%
+	\auxarraytoks=\expandafter{}%
+	\appendto{\auxarraytoks}{\scriptsize}%
+	\index=0%
+	\foreach \entry [count=\index] in {#3} {%
+			\myindex=\index
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}
+			\appendto{\auxarraytoks}{\node[anchor=center, fill=none] at }%
+			\appendexpandedvalueto{\auxarraytoks}{(ss\number\qcnt\number\rcnt)}%
+			\ifthenelse{\equal{\entry}{-1}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\redtext{$*$}};}}
+			{\ifthenelse{\equal{\entry}{0}}
+				{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{\zerocolor}{$0$}};}}
+				{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{#1}{\scalebox{#2}{\entry}}};}}}
+		}
+	\typeout{\the\auxarraytoks}
+	\expandafter{\the\auxarraytoks}%
+}
+
+\newcommand{\arrayofnumberstranspose}[2]{%
+	\auxarraytoks=\expandafter{}%
+	\appendto{\auxarraytoks}{\scriptsize}%
+	\index=0%
+	\foreach \entry [count=\index] in {#2} {%
+			\myindex=\index
+			\advance \myindex by -1%
+			\divrem{\myindex}{4}
+			\appendto{\auxarraytoks}{\node[anchor=center] at }%
+			\appendexpandedvalueto{\auxarraytoks}{(ss\number\rcnt\number\qcnt)}%
+			\ifthenelse{\equal{\entry}{0}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{\zerocolor}{0}};}}
+			{\appendexpandedvalueto{\auxarraytoks}{{\textcolor{#1}{\entry}};}}
+		}
+	\typeout{\the\auxarraytoks}
+	\expandafter{\the\auxarraytoks}%
+}

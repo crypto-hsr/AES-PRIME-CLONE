@@ -1,0 +1,56 @@
+% arara: lualatex: {interaction: nonstopmode, synctex: on,  shell: yes}
+% arara: bibtex if found('log', 'Citation .* undefined')
+% arara: lualatex: {interaction: nonstopmode, synctex: on,  shell: yes}  if found('log', 'undefined references') or found('log', 'Rerun to') or found('log', 'Citation .* undefined')
+% arara: lualatex: {interaction: nonstopmode, synctex: on,  shell: yes}  if found('log', 'Rerun to') or found('log', 'Citation .* undefined')
+%
+% !LW recipe=lualatex
+% !TEX TS-program = lualatex
+% !BIB TS-program = bibtex
+% \documentclass[journal=tosc, submission]{iacrtrans}
+% \documentclass[spthm,floatrow,nolastpage]{iacrtrans}
+\documentclass[default]{sn-jnl}
+\usepackage{lineno}
+\pagestyle{plain}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input includes/macros.tex
+\input includes/acronyms.tex
+\input tikz-defs.tex
+\newcommand{\tikzsetnextfilename}[1]{}
+\usepackage{nicematrix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\newtextcolor{black}
+\def\changedtextcolor{black}
+\def\movedtextcolor{black}
+\renewcommand{\costq}{\color{\changedtextcolor}{T_\calE}\color{black}}
+\linenumbers  % This command turns on line numbering
+\begin{document}
+\title{Improved Key-recovery Attacks on AES-Prime}
+\author*[3]{\fnm{Shibam} \sur{Ghosh}} \email{shibam.ghosh@inria.fr}
+
+\affil[3]{\orgname{Inria Paris}, \orgaddress{\city{Paris}, \country{France}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\abstract{
+}
+\keywords{}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+\aradi is \let\Section\section
+\def\section*#1{\Section*{#1}
+  \phantomsection
+  \addcontentsline{toc}{section}{References}}
+
+\newcommand{\noop}[1]{}
+\def\optional#1{#1}
+
+
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
+\let\section\Section
+\normalsize
+
+\end{document}

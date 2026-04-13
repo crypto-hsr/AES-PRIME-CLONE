@@ -1,0 +1,483 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+
+\usepackage{url}
+\usepackage{etoolbox}
+\usepackage{ifthen}
+\usepackage{shellesc}
+\usepackage{float}
+\usepackage{xstring}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+%\usepackage{rotating}
+\usepackage{colortbl}
+
+\usepackage{xspace}
+\usepackage{empheq}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{bigdelim}
+
+\usepackage{doi}
+\usepackage[inline]{enumitem}
+
+\usepackage{wasysym}
+\usepackage[normalem]{ulem}
+
+\usepackage{ragged2e}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{array}
+\usepackage{float}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% To avoid having to define an extra environment just for isolated "local" claims
+
+%\newcommand{\thmpreskip}{\vskip\topsep}
+%\newcommand{\thmpostskip}{\vskip\topsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%: Customisation of Tables
+
+\usepackage{booktabs}
+%\usepackage[list=true]{subcaption}
+%\usepackage{longtable}
+\usepackage{multirow}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Environments
+
+\usepackage{environ}
+\NewEnviron{ignore}{}
+\newenvironment{DIFnomarkup}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Fonts and symbols
+
+\usepackage{fontenc}
+
+\usepackage{soul}
+
+\usepackage[cal=esstix]{mathalpha}
+\let\mycal\mathcal
+
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+
+\newsavebox{\shortmapstobox}
+\newdimen\shortmapstolen
+\newcommand{\shortmapsto}{%
+	\savebox{\shortmapstobox}{\hbox{\scalebox{0.9}[1]{\ensuremath{\mapsto}}}}%
+	\shortmapstolen=\wd\shortmapstobox%
+	\mathrel{\kern-0.333pt\usebox{\shortmapstobox}\hskip-\shortmapstolen\hskip0.0667pt\usebox{\shortmapstobox}\kern-0.333pt}}
+
+\makeatletter
+%\def\scriptsize{\@setfontsize{\scriptsize}{7}{8pt}}
+\def\almosttiny{\@setfontsize{\almosttiny}{6}{7pt}}
+%\def\tiny{\@setfontsize{\tiny}{5}{6pt}}
+\makeatother
+
+%\newcommand{\minimskip}{\mskip1mu}
+\newcommand{\mm}{\mskip1mu}
+\newcommand{\mmm}{\mskip-1mu}
+
+\newcommand{\hm}{\hspace{1pt}}
+\newcommand{\mhm}{\hspace{-1pt}}
+
+\newcommand{\calA}{\mycal{A}}
+\newcommand{\calB}{\mycal{B}}
+\newcommand{\calC}{\mycal{C}}
+\newcommand{\calD}{\mycal{D}}
+\newcommand{\calE}{\mycal{E}}
+\newcommand{\calf}{\mycal{f}}
+\newcommand{\calg}{\mycal{g}}
+\newcommand{\calH}{\mycal{H}}
+\newcommand{\calI}{\mycal{I}}
+\newcommand{\calJ}{\mycal{J}}
+\newcommand{\calK}{\mycal{K}}
+\newcommand{\calL}{\mycal{L}}
+\newcommand{\calO}{\mycal{O}}
+\newcommand{\calP}{\mycal{P}}
+\newcommand{\calR}{\mycal{R}}
+\newcommand{\calS}{\mycal{S}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\sbb}{\textsf{SBox}\xspace}
+\newcommand{\dg}{\mathsf{d}^{\circ}}
+\newcommand{\xrr}{\textsf{XRR}\xspace}
+%Added By Shibam
+\newcommand{\red}{\color{red}}
+\newcommand{\blue}{\color{blue}}
+\newcommand{\exr}{\oplus}
+\newcommand{\bv}[1]{{\mathbf{#1}}}
+
+% latin expression:
+\newcommand{\etal}{{et al.}\xspace}
+\newcommand{\ie}{{i.e.}\xspace}
+\newcommand{\eg}{{e.g.}\xspace}
+
+% recurrent symbols/name...
+\newcommand{\GF}{\mathbb{F}_2}
+\newcommand*{\boldone}{\text{\usefont{U}{bbold}{m}{n}1}}
+\newcommand{\indic}{\boldone}
+
+\newcommand{\scrI}{\Im}
+\newcommand{\clusterp}{{\check p}}
+\newcommand{\tweaks}{\mycal{T}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\AES}{\texttt{AES}\xspace}
+\newcommand{\DES}{\texttt{DES}\xspace}
+\newcommand{\ASCON}{\texttt{ASCON}\xspace}
+\newcommand{\SHA}{\texttt{SHA}\xspace}
+\newcommand{\GCM}{\texttt{GCM}\xspace}
+\newcommand{\QARMA}{\texttt{QARMA}\xspace}
+\newcommand{\qarma}{\texttt{QARMA}\xspace}
+\newcommand{\QARMAvii}{\texttt{QARMAv2}\xspace}
+\newcommand{\SKINNY}{\texttt{SKINNY}\xspace}
+\newcommand{\qarmavii}{\texttt{QARMAv2}\xspace}
+\newcommand{\qameleon}{\texttt{Qameleon}\xspace}
+\newcommand{\PRINCE}{\texttt{PRINCE}\xspace}
+\newcommand{\GIFT}{\texttt{GIFT}\xspace}
+\newcommand{\prince}{\texttt{PRINCE}\xspace}
+\newcommand{\PRINCEvtwo}{\texttt{PRINCEv2}\xspace}
+\newcommand{\PRESENT}{\texttt{PRESENT}\xspace}
+\newcommand{\MANTIS}{\texttt{MANTIS}\xspace}
+\newcommand{\DeoxysBC}{\texttt{Deoxys-BC}\xspace}
+\newcommand{\MIDORI}{\texttt{MIDORI}\xspace}
+\newcommand{\ENIGMA}{\texttt{ENIGMA}\xspace}
+\newcommand{\djbPoly}{\texttt{Poly1305}\xspace}
+\newcommand{\ChaChaTw}{\texttt{ChaCha20}\xspace}
+\newcommand{\SPEEDY}{\texttt{SPEEDY}\xspace}
+\newcommand{\gemfive}{\texttt{gem5}\xspace}
+\newcommand{\clefia}{\texttt{CLEFIA}\xspace}
+\newcommand{\katan}{\texttt{KATAN}\xspace}
+\newcommand{\ktantan}{\texttt{KTANTAN}\xspace}
+\newcommand{\klein}{\texttt{KLEIN}\xspace}
+\newcommand{\led}{\texttt{LED}\xspace}
+\newcommand{\mercy}{\texttt{MERCY}\xspace}
+\newcommand{\threefish}{\texttt{THREEFISH}\xspace}
+\newcommand{\skein}{\texttt{SKEIN}\xspace}
+\newcommand{\TWEAKEY}{\texttt{TWEAKEY}\xspace}
+\newcommand{\Pholkos}{\texttt{Pholkos}\xspace}
+\newcommand{\SIPHASH}{\texttt{SIPHASH}\xspace}
+\newcommand{\aradi}{\texttt{ARADI}\xspace}
+\newcommand{\llama}{\texttt{LLAMA}\xspace}
+
+\newcommand{\simon}{\texttt{SIMON}\xspace}
+\newcommand{\speck}{\texttt{SPECK}\xspace}
+\newcommand{\skinny}{\texttt{SKINNY}\xspace}
+\newcommand{\mantis}{\texttt{MANTIS}\xspace}
+\newcommand{\midori}{\texttt{MIDORI}\xspace}
+\newcommand{\present}{\texttt{PRESENT}\xspace}
+\newcommand{\blowfish}{\texttt{Blowfish}\xspace}
+\newcommand{\chilow}{\texttt{CHILOW}\xspace}
+\newcommand{\scarf}{\texttt{SCARF}\xspace}
+
+\newcommand{\IS}{\mathrm{IS}}
+\newcommand{\SC}{\texttt{StateShuffle}\xspace} % TODO confusing naming (short name: SC = SubCells; long name: should start with verb (ShuffleState)).
+\newcommand{\MCol}{\texttt{MixColumns}\xspace}
+\newcommand{\MR}{\texttt{MixRows}\xspace}
+\newcommand{\XR}{\texttt{eXchangeRows}\xspace}
+\newcommand{\orto}{\mycal o}
+\newcommand{\ORTO}{\mycal O}
+\newcommand{\idplusorto}{\mycal p}
+
+\newcommand{\mono}{\textsf{mono}\xspace}
+\newcommand{\orthros}{\textsf{Orthros}\xspace}
+\newcommand{\splitcounter}{\textsf{split}\xspace}
+\newcommand{\oCC}{\textsf{oCC}\xspace}
+\newcommand{\LoC}{\textsf{LoC}\xspace}
+\newcommand{\BoC}{\textsf{BoC}\xspace}
+\newcommand{\oCCnL}{\textsf{oCC-nL}\xspace}
+\newcommand{\MirE}{\textsf{MirE}\xspace}
+\newcommand{\Lzero}{\textsf{L0}\xspace}
+\newcommand{\LI}{\textsf{L1}\xspace}
+\newcommand{\LII}{\textsf{L2}\xspace}
+\newcommand{\LIminus}{\textsf{L1--}\xspace}
+\newcommand{\LIIminus}{\textsf{L2--}\xspace}
+\newcommand{\LIIp}{\textsf{L2+}\xspace}
+\newcommand{\LIII}{\textsf{L3}\xspace}
+\newcommand{\SGX}{\textsf{SGX}\xspace}
+\newcommand{\CCA}{\textsf{CCA}\xspace}
+\newcommand{\TDX}{\textsf{TDX}\xspace}
+\newcommand{\SEV}{\textsf{SEV}\xspace}
+\newcommand{\SME}{\textsf{SME}\xspace}
+\newcommand{\cfgvec}[3]{\textsf{#1/\texttt{#2}/#3}\xspace}
+\newcommand{\XOR}{\texttt{XOR}\xspace}
+\newcommand{\GE}{\textsf{GE}\xspace}
+\newcommand{\zerosum}{\textsf{ZeroSum}\xspace}
+
+\newcommand{\deltain}{\delta_{\mathit{in}}}
+%\newcommand{\deltaT}{\delta_{\mathrm{T}}}
+\newcommand{\deltaout}{\delta_{\kern-.055em\mathit{out}}}
+\newcommand{\Deltain}{\Delta_{\mathit{in}}}
+\newcommand{\Deltaout}{\Delta_{\kern-.027em\mathit{out}}}
+\newcommand{\Nablain}{\nabla_{\mathit{in}}}
+\newcommand{\Nablaout}{\nabla_{\kern-.027em\mathit{out}}}
+\newcommand{\DeltaT}{\Delta_{\mathrm{T}}}
+\newcommand{\din}{d_{\mathit{in}}}
+\newcommand{\dout}{d_{\kern-.027em\mathit{out}}}
+\newcommand{\ein}{e_{\mathit{in}}}
+\newcommand{\eout}{e_{\kern-.027em\mathit{out}}}
+\newcommand{\dinstar}{\din^{\kern.04em*}}
+\newcommand{\dT}{d_{\kern-.027em\mathit{T}}}
+\newcommand{\hatdout}{{\widehat d}_{\kern-.027em\mathit{out}}}
+\newcommand{\Din}{D_{\mathit{in}}}
+\newcommand{\Dout}{D_{\kern-.11em\mathit{out}}}
+\newcommand{\DT}{D_{\kern-.027em\mathit{T}}}
+\newcommand{\hatDout}{{\widehat D}_{\kern-.11em\mathit{out}}}
+
+\newcommand{\smin}{s_{\mathit{min}}}
+\newcommand{\zetamin}{\zeta_{\mathit{min}}}
+
+\newcommand{\rin}{r_{\mathit{in}}}
+\newcommand{\rout}{r_{\kern-.11em\mathit{out}}}
+\newcommand{\rmid}{r_{\mathit{mid}}}
+\newcommand{\Kbits}{\calK}
+\newcommand{\Kin}{\Kbits_{\mathit{in}}}
+\newcommand{\Kout}{\Kbits_{\kern-.082em\mathit{out}}}
+\newcommand{\keyguess}{k}
+\newcommand{\kin}{\keyguess_{\mathit{in}}}
+\newcommand{\kout}{\keyguess_{\kern-.055em\mathit{out}}}
+\newcommand{\cin}{c_{\mathit{in}}}
+\newcommand{\cout}{c_{\kern-.055em\mathit{out}}}
+
+\newcommand{\TGF}{T_{\textit{GF}}}
+\newcommand{\SGF}{S_{\textit{GF}}}
+\newcommand{\TMR}{T_{\textit{MR}}}
+\newcommand{\TMW}{T_{\textit{MW}}}
+\newcommand{\Toracle}{T_{\calO}}
+\newcommand{\costq}{T_\calE}
+
+\DeclareFontFamily{U}{rcjhbltx}{}
+\DeclareFontShape{U}{rcjhbltx}{m}{n}{<->rcjhbltx}{}
+\DeclareSymbolFont{hebrewletters}{U}{rcjhbltx}{m}{n}
+
+% remove the definitions from amssymb
+\let\aleph\relax\let\beth\relax
+\let\gimel\relax\let\daleth\relax
+
+\DeclareMathSymbol{\aleph}{\mathord}{hebrewletters}{39}
+\DeclareMathSymbol{\beth}{\mathord}{hebrewletters}{98}\let\bet\beth
+\DeclareMathSymbol{\gimel}{\mathord}{hebrewletters}{103}
+\DeclareMathSymbol{\daleth}{\mathord}{hebrewletters}{100}\let\dalet\daleth
+
+\DeclareMathSymbol{\lamed}{\mathord}{hebrewletters}{108}
+\DeclareMathSymbol{\mem}{\mathord}{hebrewletters}{109}\let\mim\mem
+\DeclareMathSymbol{\ayin}{\mathord}{hebrewletters}{96}
+\DeclareMathSymbol{\tsadi}{\mathord}{hebrewletters}{118}
+\DeclareMathSymbol{\qof}{\mathord}{hebrewletters}{113}
+\DeclareMathSymbol{\shin}{\mathord}{hebrewletters}{152}
+
+\def\hpzz{\hphantom{.00}}
+\def\hzz{\hphantom{00}}
+\def\hz{\hphantom{0}}
+\def\lbar{\mbox{\l}}
+
+%\def\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+%\setcounter{tocdepth}{3}
+%\def\colornopagebreak#1{\color{#1}\nopagebreak}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Colors
+
+\usepackage{xcolor}
+
+\selectcolormodel{rgb}
+\definecolor{purple}{HTML}{7F00FF}
+\definecolor{lightgray}{HTML}{BAC8D3}
+\definecolor{darkgray}{HTML}{647687}
+
+\definecolor{lightred}{rgb}{0.8,0.2,0.2}
+\definecolor{darkred}{rgb}{0.75,0,0}
+\definecolor{darkblue}{rgb}{0,0.4,0.8}
+\definecolor{armBlue}{rgb}{0, 0.55859375, 0.73828125}
+\definecolor{armMidBlue}{rgb}{0, 0.36328125, 0.51171875}
+\definecolor{armDarkBlue}{rgb}{0, 0.216796875, 0.3984375}
+\definecolor{armDarkerBlue}{rgb}{0, 0.16796875, 0.28515625}
+
+\definecolor{verydarkgray}{rgb}{.13,.13,.13}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{gray}{rgb}{.5,.5,.5}
+\definecolor{lightgray}{rgb}{.75,.75,.75}
+\definecolor{midgray}{rgb}{.675,.675,.675}
+\definecolor{verylightgray}{rgb}{.93,.93,.93}
+\definecolor{lightestgray}{rgb}{.97,.97,.97}
+
+\definecolor{lightgreen}{rgb}{0.16,0.8,0.48}
+\definecolor{midgreen}{rgb}{0.13,0.625,0.33}
+\definecolor{darkgreen}{rgb}{0.1,0.48,0.16}
+\definecolor{darkergreen}{rgb}{0.075,0.32,0}
+\definecolor{armGreen}{rgb}{0.171875,0.765625,0.4453125}
+
+\definecolor{joli}{RGB}{225,95,0}
+\definecolor{cupo}{RGB}{112,47,0}
+\definecolor{dandelion}{HTML}{FDBC42}
+\definecolor{mustard}{HTML}{FFDB58}
+\definecolor{darkorange}{rgb}{1.00,0.40,0.00}
+
+\definecolor{tug}{HTML}{F70146}
+\colorlet   {colA}{tug}%          % Akzent 1
+\definecolor{colB}{HTML}{5191C1}% % Akzent 2
+\definecolor{colC}{HTML}{A5A5A5}% % Akzent 3
+\definecolor{colD}{HTML}{285F82}% % Akzent 4
+\definecolor{colE}{HTML}{78B473}% % Akzent 5
+\definecolor{colF}{HTML}{E59352}% % Akzent 6
+
+\definecolor{cubeVarColor}{HTML}{7F00FF}
+\definecolor{balancedVarColor}{RGB}{112,47,0}
+\definecolor{keyVarColor}{RGB}{112,123,0}
+\definecolor{ciphertextColor}{RGB}{50,123,0}
+\newcommand{\Col}[3]{#1^{#2}_{\scriptscriptstyle\uparrow #3}}
+\newcommand{\Coll}[2]{#1_{\scriptscriptstyle\uparrow #2}}
+\newcommand{\Roww}[2]{#1_{#2 \scriptscriptstyle \rightarrow}}
+\newcommand{\cb}[1]{\setlength{\fboxsep}{0pt}\fbox{\color{#1}\rule{.5em}{.5em}}}
+
+
+%Colors (used by Shibam)
+\newcommand{\tcr}{\textcolor{red}}
+\newcommand{\tcb}{\textcolor{blue}}
+\newcommand{\tcg}{\textcolor{green}}
+
+%%% TUG named palette
+\colorlet{tugred}{colA}
+\colorlet{tuggreen}{colE}
+\colorlet{tugblue}{colD}
+\colorlet{tugyellow}{colF}
+
+\colorlet{diff}{tugblue}
+\colorlet{marc}{tugyellow}
+\colorlet{cost}{tugred}
+\colorlet{state}{tugblue}
+
+\selectcolormodel{cmyk}
+
+\def\legendcolor#1{#1}
+
+\def\redtext#1{\textcolor{red}{#1}}
+\def\bluetext#1{\textcolor{blue}{#1}}
+
+\makeatletter
+\newcommand{\xmapsfrom}[2][]{%
+	\ext@arrow3095\leftarrowfill@{#1}{#2}\mapsfromchar
+}
+\makeatother
+
+\def\graymidrule{\arrayrulecolor{lightgray}\midrule\arrayrulecolor{black}}
+
+\newdimen\myaboverulesep
+\newdimen\mybelowrulesep
+\myaboverulesep=0.45ex
+\mybelowrulesep=0.70ex
+\makeatletter
+\def\mymidrule{\noalign{\ifnum0=`}\fi
+	\@aboverulesep=\myaboverulesep
+	\global\@belowrulesep=\mybelowrulesep
+	\global\@thisruleclass=\@ne
+	\@ifnextchar[{\@BTrule}{\@BTrule[\lightrulewidth]}}
+\makeatother
+
+\def\mygraymidrule{\arrayrulecolor{lightgray}\mymidrule\arrayrulecolor{black}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% References, back references, links, acronyms
+
+%\usepackage[nospace]{varioref}
+
+\iffalse
+	\makeatletter
+	\@ifundefined{DIFadd}{
+		\AtEndPreamble{
+			\usepackage[hyperpageref]{backref}
+			\renewcommand*{\backref}[1]{}
+			\renewcommand*{\backrefalt}[4]{%
+				\ifcase #1 % No citations.%
+				\or
+					%\hfill\break
+					Cited on page~#2.%
+				\else
+					%\hfill\break
+					Cited on pages~#2.%
+				\fi}
+		}
+	}{}
+	\makeatother
+\fi
+
+\AtEndPreamble{%
+	\usepackage[capitalise]{cleveref}
+
+	\newtheorem{defn}{Definition}[section]
+	\newtheorem{rem}{Remark}[section]
+    \newtheorem{remark}{Remark}
+    \newtheorem{lemma}{Lemma}
+
+	\crefname{subsection}{Section}{Sections}
+	\Crefname{subsection}{Section}{Sections}
+	\crefname{subsubsection}{Section}{Sections}
+	\Crefname{subsubsection}{Section}{Sections}
+	\crefname{rem}{Remark}{Remarks}
+	\Crefname{rem}{Remark}{Remarks}
+	\Crefname{rem}{Remark}{Remarks}
+	\crefname{equation}{Equation}{Equations}
+	\Crefname{equation}{Equation}{Equations}
+	\crefname{figure}{Figure}{Figures}
+	\Crefname{table}{Table}{Tables}
+	\crefname{table}{Table}{Tables}
+}
+
+\newcommand{\this}[1]{#1\xspace}
+\newcommand{\myvskip}{\vskip 0.5\topsep}%
+\newcommand{\bit}{-bit\xspace}
+\newcommand{\bits}{\,bits\xspace}
+
+%\newcommand{\CHAR}{Characteristic\xspace}
+%\newcommand{\CHARS}{Characteristics\xspace}
+\newcommand{\CHAR}{Char.\xspace}
+\newcommand{\CHARS}{Chars.\xspace}
+
+\newcommand{\rangeto}{\mbox{\text{\,---\,}}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Lengths
+%
+\newlength\replength
+\newcommand\ruleht{2.5pt}% ELEVATION OF RULE
+\newcommand\repfrac{1}% SOLID FRACTION OF DASH LINE [0->1] (USE 1 FOR SOLID)
+\replength=.6em\relax% PERIOD OF DASHED RULE
+\newcommand\rulewidth{0.5pt}% THICKNESS OF RULE
+\newcommand\drulefill{\leavevmode\dashfill\hfil%
+	\kern\dimexpr\repfrac\replength-\replength\relax}
+\newcommand\dashfill[1][\repfrac]{\cleaders\hbox to \replength{%
+		\smash{\rule[\ruleht]{\repfrac\replength}{\rulewidth}}}\hfill}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\naive{na\"\i ve\xspace}
+\def\Naive{Na\"\i ve\xspace}
+\def\naively{na\"\i vely\xspace}
+\def\Naively{Na\"\i vely\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\textfloatsep}{14pt}
+\setlength{\intextsep}{14pt}
+
+\makeatletter
+\renewcommand\paragraph{%
+  \@startsection{paragraph}{4}{\z@}%
+    {3.25ex \@plus1ex \@minus.2ex}%
+    {-1em}%
+    {\normalfont\normalsize\bfseries}% <-- The only change is here: \itshape to \bfseries
+}
+\makeatother
